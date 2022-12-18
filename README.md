@@ -5,8 +5,8 @@ goma is a stochastic Go engine written in `python3`
 > noun
 > 1. *Sesamum indicum* Sesame plant, produces small oval seeds.
 
->small seed of far reach
->white flower in summer blooms
+>small seed of far reach <br>
+>white flower in summer blooms <br>
 >from oval take oil
 
 ### Project Motivation:
@@ -22,4 +22,3 @@ Improving the interface for [dango](https://github.com/gsobell/dango), with esti
 goma is already better than most humans (most humans don't know how to play go)
 
 If you like this, you might also enjoy [cbonsai](https://gitlab.com/jallbrit/cbonsai), [sabaki](https://github.com/SabakiHQ/Sabaki), [baduk-fortune](https://github.com/gsobell/baduk-fortune), and [haikunator](https://github.com/usmanbashir/haikunator).
-# goma
