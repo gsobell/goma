@@ -1,5 +1,5 @@
 # goma
-goma is a stochastic Go engine written in `python3`
+goma is a stochastic Go engine written in python
 
 > **go•ma** [ごま]
 > noun
@@ -10,7 +10,7 @@ goma is a stochastic Go engine written in `python3`
 >from oval take oil
 
 ### Project Motivation:
-This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back it at a later date, when both are functional. The goal isn't to compete with neural-net Go engines, rather to write a passably decent knowledge based engine from scratch
+This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back it at a later date, when both are functional. The goal isn't to compete with neural-net Go engines, rather to write a passably decent knowledge based engine from scratch.
 
 ### Project Blueprint:
 * `GTP` compatible I/O
@@ -19,6 +19,9 @@ This project is an outgrowth of [dango](https://github.com/gsobell/dango), with 
 * Basic joseki (openings)
 * Game status estimation
 * Use interpolation to make game heatmap
+
+### Project Moonshots
+* Monte Carlo Search Tree (MCST) Life/Death readouts
 
 goma is already better than most humans (most humans don't know how to play go)
 
