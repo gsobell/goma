@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-from gtp_spec import known_commands, recieve_input
+from engine import game_round, Game
 
-def play():
+def goma():
+    game = Game()
     while True:
-        recieve_input()
+        game_round(game)
 
 
 if __name__ == "__main__":
-    play()
+    goma()
