@@ -129,25 +129,17 @@ def genmove(color, game):
     while True:
         row = randint(0, game.size - 1)
         col = randint(0, game.size - 1)
-        played = game.board.white.stones + game.board.black.stones
-        if (row, col) not in played:
-            # copy play but (row, col) not A1
-            if color == 1:
-                game.board.white.add_stone(row, col, game.board)
-            else:
-                game.board.black.add_stone(row, col, game.board)
-            capture(row, col, -color, game.board)
+        if (row, col) not in [j for j in [k for k in game.board.white]]:
+            game.board.add_stone(row, col, color)
             break
+    # work on capture here
     return game.output(coord_to_move(row, col, game.size))
 
 
 def play(color, move, game):
     row, col = move_to_coord(move, game)
-    if color == 1:
-        game.board.white.add_stone(row, col, game.board)
-    else:
-        game.board.black.add_stone(row, col, game.board)
-    capture(row, col, -color, game.board)  # not confident that -color and not color, check
+    game.board.add_stone(row, col, color)
+    # work on capture here
 
 
 def coord_to_move(row, col, size):
@@ -168,50 +160,3 @@ def move_to_coord(move, game): # ValueError: invalid literal for int() with base
     if row.isnumeric():
         row = game.size - int(row)
     return row, col
-
-def capture(row, col, color, board):
-    """Check capture upon stone placement of adjacent groups
-    Parameters:
-    row, col: starting point
-    color: color of group we are checking if alive
-    chain: list chain to capture, if it has no liberties"""
-    locations, values = adjacent(row, col, board)
-    for loc, val in zip(locations, values):
-        if val == (-color or 0):
-            continue
-        if val == color:
-            group = recursive_capture(loc[0], loc[1], color, board, [loc])
-            if group:
-                if color == 1:
-                    board.white.rm_stones()
-                else:
-                    board.black.rm_stones()
-                for location in group:
-                    board.board[location[0]][location[1]] = 0
-                group = []
-
-
-def recursive_capture(row, col, color, board, visited):
-    """Using DFS to visit all stones in group"""
-    locations, values = adjacent(row, col, board)
-    if 0 in values:
-        return False
-    for loc, val in zip(locations, values):
-        """Halting condition is when every cell
-        is surounded by other or visited"""
-        if (val == -color) or (loc in visited):
-            continue
-        visited.append(loc)
-        visited = recursive_capture(loc[0], loc[1], color, board, visited)
-    return visited
-
-
-def adjacent(row, col, board):
-    location = [(row+a[0], col+a[1])
-                for a in [(-1, 0), (1, 0), (0, -1), (0, 1)]
-                if ((0 <= row+a[0] < board.size) and
-                    (0 <= col+a[1] < board.size))]
-    values = [board.board[a[0]][a[1]] for a in location]
-    return location, values
-
-
