@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from random import randint
+from random import choice
 from board import Board
 
 class Game:
@@ -16,6 +16,7 @@ class Game:
                                'komi', 'play', 'genmove')
         self.info = self.known_commands[0:4]
         self.play = self.known_commands[5:]
+        self.hist = [] # coords, not moves
 
     def output(self, msg = ''):
         print('=' + self.id_ + msg + '\n' )
@@ -85,8 +86,9 @@ def game_round(game):
             if int(user_in[1]) > 19:
                 raise ValueError
             if user_in[1].isnumeric():
-                    game.size = int(user_in[1])
-                    game = Game(19) # resets as per GTP
+                    new_size = int(user_in[1]) # reset board size, everything becomes arbitrary
+                    game.board.empty = [(row, col) for row in range(new_size) for col in range(new_size)]
+                    game.board.white = game.board.black = []
                     game.output()
                     return
         except IndexError:
@@ -108,7 +110,10 @@ def game_round(game):
             print('\n')
         elif command == 'clear_board':
             # reset everything
-            pass
+            new_size = int(user_in[1]) # reset board size, everything becomes arbitrary
+            game.board.empty = [(row, col) for row in range(game.size) for col in range(game.size)] # does not work?
+            game.board.white = game.board.black = []
+            game.output()
         elif command == 'name':
             game.output('goma')
             return
@@ -126,18 +131,20 @@ def game_round(game):
 
 
 def genmove(color, game):
-    while True:
-        row = randint(0, game.size - 1)
-        col = randint(0, game.size - 1)
-        if (row, col) not in [j for j in [k for k in game.board.white]]:
-            game.board.add_stone(row, col, color)
-            break
-    # work on capture here
+    print(game.board.empty)
+    if not game.board.empty:
+        return game.output('PASS')
+    cord = choice(game.board.empty)
+    game.board.empty.remove(cord)
+    row, col = cord
+    game.hist.append((row, col))
+    game.board.add_stone(row, col, color)
     return game.output(coord_to_move(row, col, game.size))
 
 
 def play(color, move, game):
     row, col = move_to_coord(move, game)
+    game.hist.append((row, col))
     game.board.add_stone(row, col, color)
     # work on capture here
 

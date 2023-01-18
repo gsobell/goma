@@ -11,7 +11,7 @@ class Board:
         self.size = SIZE
         self.white = [] # list of lists of tuples
         self.black = []
-
+        self.empty = [(row, col) for row in range(SIZE) for col in range(SIZE)]
 
     def add_stone(self, row, col, color):
         if color == 1:
@@ -36,7 +36,11 @@ class Board:
 
 
     def adjacent(self, row, col):
-        location = [(row+a[0], col+a[1])
+        if type(row) is not int: # for debug
+            print(f'row is not int, is {row}')
+        if type(col) is not int:
+            print(f'col is not int, is {col}')
+        location = [(row + a[0], col + a[1])
                 for a in [(-1, 0), (1, 0), (0, -1), (0, 1)]
                 if ((0 <= row + a[0] < self.size) and
                     (0 <= col + a[1] < self.size))]
