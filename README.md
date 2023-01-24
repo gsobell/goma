@@ -5,10 +5,6 @@ goma is a stochastic Go engine written in python
 > noun
 > 1. *Sesamum indicum* Sesame plant, produces small oval seeds.
 
->small seed of far reach <br>
->white flower in summer blooms <br>
->from oval take oil
-
 ### Project Motivation:
 This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back it at a later date, when both are functional. The goal isn't to compete with neural-net Go engines, rather to write a passably decent knowledge based engine from scratch.
 
@@ -26,8 +22,7 @@ You can use goma with any board GUI that supports `GTP` For example, with [Sabak
 
 ### Current
 * Places stones on the board randomly
-* Conforms to [`GTP`](https://www.lysator.liu.se/~gunnar/gtp/) protoccol
-* Nigiri pre-game (similar to coin toss)
+* Full [`GTP`](https://www.lysator.liu.se/~gunnar/gtp/) protocol
 
 ### Future
 * Basic game logic (including keeping track of captures)
@@ -46,33 +41,23 @@ goma is already better than most humans (most humans don't know how to play go)
 
 Here's a recent game of GnuGo v goma, run in Sabaki:
 ```
-GnuGo v goma
+GnuGo v. goma
 ------------
-X : goma
-O : GnuGo
-$$ +---------------------------------------+
-$$ | . . . . . . . . . . . . . . . . . . . |
-$$ | . . . . . . . . . . . . . . . . . . . |
-$$ | . . . X . . . O . . . O . . X . O . . |
-$$ | . . . , X . . O X O . . O . . , . . . |
-$$ | . . O . . X . O O . X . . . O . O . . |
-$$ | . . . . . . X . . . . . . . . . . . . |
-$$ | . . . . . X . . . X . . . . . . . . X |
-$$ | . . . . . . . . . . X . . . . . . . . |
-$$ | . X X . . . . . . . . . . . X . . . . |
-$$ | . . . , . . . . . , . . . . . , . O . |
-$$ | . . . . . . . . . . . . . . . . O X . |
-$$ | . . . . . . . . . O . . . . . O . . X |
-$$ | . . . . . . . . O . X . . . . . . . . |
-$$ | . . . . . . . X . . . . . . . . . . . |
-$$ | . . . . . X . . . O . O . . . . . X . |
-$$ | . . X , . . . . . , . . . . O , O O . |
-$$ | . X . . . . O . . O . X . . . O X . . |
-$$ | . . X . . . . X . . . O . . . . . . . |
-$$ | . . . . X . . . . . . . . . . . . . . |
-$$ +---------------------------------------+
+X : GnuGo
+O : goma
+$$ +-------------------+
+$$ | . X . . . O O X . |
+$$ | X O . O . O O X O |
+$$ | X O , X X . O X . |
+$$ | X O X O . X X O O |
+$$ | . X , O X . , X X |
+$$ | X . X . O X . . . |
+$$ | O X , X X O , . . |
+$$ | . O X . . X . O . |
+$$ | . . X O O X O . O |
+$$ +-------------------+
 ```
-The game continued until goma made an illegal move and GnuGo crashed.
+The game continued until goma attempted self-atari and GnuGo couldn't sync to the current state.
 
 ***
 

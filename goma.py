@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from engine import game_round, Game
 
+
 def goma():
     game = Game()
     while True:

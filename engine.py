@@ -2,8 +2,9 @@
 from random import choice
 from board import Board
 
+
 class Game:
-    def __init__(self, SIZE=19):
+    def __init__(self, SIZE=19):  # default testing size = 3
         self.size = SIZE
         self.komi = 6.5
         self.white = 1
@@ -14,20 +15,21 @@ class Game:
                                'known_command', 'list_commands',
                                'quit', 'boardsize', 'clear_board',
                                'komi', 'play', 'genmove')
-        self.info = self.known_commands[0:4]
-        self.play = self.known_commands[5:]
-        self.hist = [] # coords, not moves
+        self.info = self.known_commands[0:5]
+        self.admin = self.known_commands[5:9]
+        self.gameplay = self.known_commands[9:]
+        self.hist = []  # coords, not moves
 
-    def output(self, msg = ''):
-        print('=' + self.id_ + msg + '\n' )
+    def output(self, msg=''):
+        print('=' + self.id_ + msg + '\n')
 
     def error(self, msg=''):
-        print('? ' + self.id_ + msg + '\n' )
+        print('? ' + self.id_ + msg + '\n')
 
 
 def receive_input(game):
     """Recieves user input and parses."""
-    user_in =  input().split(' ')
+    user_in = input().split(' ')
     # fix this with *args unpacking!!
     try:
         if user_in == ['']:
@@ -47,115 +49,127 @@ def receive_input(game):
     return user_in, command, arg
 
 
-def game_round(game):
-    user_in, command, arg = receive_input(game)
-    # for debbuging:
-    # print(f"user_in is: {user_in}")
-    # print(f"command is: {command}")
-    # print(f"arg is: {arg}")
+def info(game, user_in, command, arg):
+    if command == 'name':
+        game.output('goma')
+    elif command == 'version':
+        game.output('0.0.2')
+    elif command == 'protocol_version':
+        game.output('2')
+    elif command == 'known_command':
+        result = True if user_in.split(' ')[1] in game.known_commands else False
+        game.output(result)
+    elif command == 'list_commands':
+        print('=')
+        for item in game.known_commands:
+            print(item, sep="\n")
+        print('\n')
+
+
+def gameplay(game, user_in, command, arg):
     if command == 'play':
-        move = arg
-        if arg[1] == 'pass':
+        color, move = arg
+        if move == 'pass':
             game.output()
             return
-        elif ('W' or 'w') in user_in:
-            play(game.white, move, game)
-        elif ('B' or 'b') in command:
+        if len(move) != (2 or 3):
+            pass
+        elif ('W' or 'w') in color:
+            play(game.white, move, game)  # hacky move parseing
+        elif ('B' or 'b') in color:
             play(game.black, move, game)
-        game.output()
         return
     elif command == 'genmove':
         if ('W' or 'w') in user_in:
             genmove(game.white, game)
         elif ('B' or 'b') in user_in:
             genmove(game.black, game)
-        else:
-            game.error(f"{commands} is not a valid move.")
         return
-    elif command == 'undo':
+    game.error(f"{command} is not a valid move.")
+
+
+def admin(game, user_in, command, arg):
+    if command == 'undo':
         game.output('Cannot undo.')
-    elif command == 'clear_board':
-        game.output()
-    elif command == 'komi':
+    if command == 'komi': # komi is broken
         if arg:
             game.komi = arg
-        game.output()
-        return
+            game.output()
+            return
+        game.error("No komi given")
     elif command == 'boardsize':
         try:
             if int(user_in[1]) > 19:
                 raise ValueError
             if user_in[1].isnumeric():
-                    new_size = int(user_in[1]) # reset board size, everything becomes arbitrary
-                    game.board.empty = [(row, col) for row in range(new_size) for col in range(new_size)]
-                    game.board.white = game.board.black = []
-                    game.output()
-                    return
+                new_size = int(user_in[1])  # everything becomes arbitrary
+                game.board.empty = [(row, col) for row in
+                                    range(new_size) for col in range(new_size)]
+                game.board.white = game.board.black = []
+                game.size = new_size
+                game.board.size = new_size
+                game.output()
+                return
         except IndexError:
             game.output('Please include an interger argument')
         except ValueError:
             game.output('Unacceptable size')
-        return
-    elif command in game.known_commands:
-        if command == 'quit':
+    elif command == 'clear_board':
+        # everything becomes arbitrary
+        game.board.empty = [(row, col) for row in range(game.size)
+                            for col in range(game.size)]
+        game.board.white = game.board.black = []
+        game.output()
+    elif command == 'quit':
             game.output()
             exit()
-        elif command == 'known_command':
-            result = True if user_in.split(' ')[1] in self.known_commands else False
-            game.output(result)
-        elif command == 'list_commands':
-            print('=')
-            for item in game.known_commands:
-                print(item, sep = "\n")
-            print('\n')
-        elif command == 'clear_board':
-            # reset everything
-            new_size = int(user_in[1]) # reset board size, everything becomes arbitrary
-            game.board.empty = [(row, col) for row in range(game.size) for col in range(game.size)] # does not work?
-            game.board.white = game.board.black = []
-            game.output()
-        elif command == 'name':
-            game.output('goma')
-            return
-        elif command == 'version':
-            game.output('0.0.1')
-            return
-        elif command == 'protocol_version':
-            game.output('2')
-            return
+
+
+def game_round(game):
+    user_in, command, arg = receive_input(game)
+    if command in game.gameplay:
+        gameplay(game, user_in, command, arg)
+    elif command in game.info:
+        info(game, user_in, command, arg)
+    elif command in game.admin:
+        admin(game, user_in, command, arg)
     else:
         game.error(f"{user_in} is not a valid command")
-        game.error(f"Type 'list_commands' for valid commands")
-        # game.output(f"? unknown command")
+        game.error("Type 'list_commands' for valid commands")
     return
 
 
 def genmove(color, game):
-    print(game.board.empty)
     if not game.board.empty:
         return game.output('PASS')
-    cord = choice(game.board.empty)
-    game.board.empty.remove(cord)
-    row, col = cord
+    row, col = choice(game.board.empty)
+    # needs to check move is not self-atari, borrow snipet from dango
+    game.board.empty.remove((row, col))
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
     return game.output(coord_to_move(row, col, game.size))
 
 
 def play(color, move, game):
-    row, col = move_to_coord(move, game)
+    row, col = move_to_coord(move, game.size)
+    print(move)
+    print((row, col))
+    if (row, col) in game.board.empty:  # until capture implemented
+        game.board.empty.remove((row, col))
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
     # work on capture here
+    game.output()
 
 
 def coord_to_move(row, col, size):
     col = 'ABCDEFGHJKLMNOPQRST'[col]
-    row =  int(row) + 1
+    row = int(row) + 1
     move = str(col) + str(row)
     return move
 
-def move_to_coord(move, game): # ValueError: invalid literal for int() with base 10: '' <---fix me
+
+def move_to_coord(move, size):
     row = ''
     for k in move:
         if k.isupper():
@@ -165,5 +179,5 @@ def move_to_coord(move, game): # ValueError: invalid literal for int() with base
         elif k.isnumeric():
             row += k
     if row.isnumeric():
-        row = game.size - int(row)
+        row = int(row) - 1
     return row, col
