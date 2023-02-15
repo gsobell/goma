@@ -50,10 +50,11 @@ def receive_input(game):
 
 
 def info(game, user_in, command, arg):
+    """Returns queried GTP info command"""
     if command == 'name':
         game.output('goma')
     elif command == 'version':
-        game.output('0.0.2')
+        game.output('0.0.3')
     elif command == 'protocol_version':
         game.output('2')
     elif command == 'known_command':
@@ -67,15 +68,14 @@ def info(game, user_in, command, arg):
 
 
 def gameplay(game, user_in, command, arg):
+    """play() and genmove() are routed here"""
     if command == 'play':
         color, move = arg
         if move == 'pass':
             game.output()
             return
-        if len(move) != (2 or 3):
-            pass
         elif ('W' or 'w') in color:
-            play(game.white, move, game)  # hacky move parseing
+            play(game.white, move, game)
         elif ('B' or 'b') in color:
             play(game.black, move, game)
         return
@@ -91,12 +91,15 @@ def gameplay(game, user_in, command, arg):
 def admin(game, user_in, command, arg):
     if command == 'undo':
         game.output('Cannot undo.')
-    if command == 'komi': # komi is broken
-        if arg:
+    if command == 'komi':
+        if arg and arg[0].replace('.', '', 1).isnumeric():
             game.komi = arg
             game.output()
-            return
-        game.error("No komi given")
+        elif arg:
+            game.error("Not valid komi")
+        else:
+            game.error("No komi given")
+        return
     elif command == 'boardsize':
         try:
             if int(user_in[1]) > 19:
@@ -121,8 +124,8 @@ def admin(game, user_in, command, arg):
         game.board.white = game.board.black = []
         game.output()
     elif command == 'quit':
-            game.output()
-            exit()
+        game.output()
+        exit()
 
 
 def game_round(game):
@@ -142,24 +145,42 @@ def game_round(game):
 def genmove(color, game):
     if not game.board.empty:
         return game.output('PASS')
-    row, col = choice(game.board.empty)
-    # needs to check move is not self-atari, borrow snipet from dango
+    row, col = None, None
+    choices = game.board.empty[:]
+    while self_atari(row, col, color, game):  # needs checking, improvement
+        if row is not None:
+            choices.remove((row, col))
+        if not choices:
+            return game.output('PASS')
+        row, col = choice(choices)
     game.board.empty.remove((row, col))
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
+    # game.board.asciiboard1() # NOTE resume testing later
+    # game.board.asciiboard2()
     return game.output(coord_to_move(row, col, game.size))
 
 
 def play(color, move, game):
     row, col = move_to_coord(move, game.size)
-    print(move)
-    print((row, col))
-    if (row, col) in game.board.empty:  # until capture implemented
+    if (row, col) in game.board.empty:
         game.board.empty.remove((row, col))
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
-    # work on capture here
     game.output()
+
+
+def self_atari(row, col, color, game):
+    """Checks stone placement (row, col) isn't surrounded by opposite color"""
+    if row is None:
+        return True
+    adjacent = [(row + a[0], col + a[1]) for a in [(-1, 0), (1, 0), (0, -1), (0, 1)]
+                if ((0 <= row + a[0] < game.size) and (0 <= col + a[1] < game.size))]
+    friend = game.board.white if color == 1 else game.board.black
+    for stone in adjacent:
+        if (stone in game.board.empty) or (stone in friend):
+            return False
+    return True
 
 
 def coord_to_move(row, col, size):

@@ -6,7 +6,7 @@ goma is a stochastic Go engine written in python
 > 1. *Sesamum indicum* Sesame plant, produces small oval seeds.
 
 ### Project Motivation:
-This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back it at a later date, when both are functional. The goal isn't to compete with neural-net Go engines, rather to write a passably decent knowledge based engine from scratch.
+This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back in the future. The goal isn't to compete with neural-net Go engines, rather to write a passably decent engine from scratch. It is very much a work in progress, and should be handled as such.
 
 ## Usage
 ### Installation
@@ -22,12 +22,14 @@ You can use goma with any board GUI that supports `GTP` For example, with [Sabak
 
 ### Current
 * Places stones on the board randomly
+* Only makes legal moves; passes at end of game
 * Full [`GTP`](https://www.lysator.liu.se/~gunnar/gtp/) protocol
 
 ### Future
-* Basic game logic (including keeping track of captures)
+* Basic game logic
 * Basic joseki (openings)
 * Basic shape (group) library
+* Help flag and information
 * Game status estimation
 * Moderate to heavy refactoring
 * Use interpolation to make game heatmap
@@ -45,20 +47,22 @@ GnuGo v. goma
 ------------
 X : GnuGo
 O : goma
+$$ 
 $$ +-------------------+
-$$ | . X . . . O O X . |
-$$ | X O . O . O O X O |
-$$ | X O , X X . O X . |
-$$ | X O X O . X X O O |
-$$ | . X , O X . , X X |
-$$ | X . X . O X . . . |
-$$ | O X , X X O , . . |
-$$ | . O X . . X . O . |
-$$ | . . X O O X O . O |
+$$ | O O O O X . X O O |
+$$ | . O X X X X X . O |
+$$ | O O X O O . O O O |
+$$ | O O X X O O X X O |
+$$ | X X X . X X X . X |
+$$ | O O X X X . X X X |
+$$ | . X X . X X O . O |
+$$ | O X . X O X O X O |
+$$ | . O X . O . X . O |
 $$ +-------------------+
 ```
-The game continued until goma attempted self-atari and GnuGo couldn't sync to the current state.
+The game continued until GnuGo passed, and goma passed the following move.
 
 ***
 
-If you like this, you might also enjoy [dango](https://github.com/gsobell/dango), [cbonsai](https://gitlab.com/jallbrit/cbonsai), [sabaki](https://github.com/SabakiHQ/Sabaki), [baduk-fortune](https://github.com/gsobell/baduk-fortune), and [haikunator](https://github.com/usmanbashir/haikunator).
+If you like this, you might also enjoy [dango](https://github.com/gsobell/dango).
+For an very intresting overview of Computer Go and a bot in Rust: [rustygo](https://github.com/mratsim/rustygo).
