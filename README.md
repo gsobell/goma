@@ -18,6 +18,8 @@ chmod +x goma.py # make executable
 ```
 You can use goma with any board GUI that supports `GTP` For example, with [Sabaki](https://github.com/SabakiHQ/Sabaki), go to preferences -> engines -> add engine, and place `/{path to goma}/goma.py` in the path field.
 
+There is also the `asciiboard()` function, uncommented by default, that provides an ascii terminal interface similar to GnuGo's `--mode ascii`.
+
 ## Features
 
 ### Current
@@ -41,28 +43,38 @@ goma is already better than most humans (most humans don't know how to play go)
 
 ## Examples
 
-Here's a recent game of GnuGo v goma, run in Sabaki:
+Here's a recent game of goma v goma, run in Sabaki:
 ```
-GnuGo v. goma
+goma v. goma
 ------------
-X : GnuGo
-O : goma
-$$ 
-$$ +-------------------+
-$$ | O O O O X . X O O |
-$$ | . O X X X X X . O |
-$$ | O O X O O . O O O |
-$$ | O O X X O O X X O |
-$$ | X X X . X X X . X |
-$$ | O O X X X . X X X |
-$$ | . X X . X X O . O |
-$$ | O X . X O X O X O |
-$$ | . O X . O . X . O |
-$$ +-------------------+
+ ● : goma
+ ○ : goma
+ +---------------------------------------+
+ | ● ● ● ● ● ○ ○ ● ● ● ● ● ○ · ● ● ● ● ● |
+ | ● ● ● ● ○ · ○ ● ● ● ● ● ● ○ ● ● ○ ○ ● |
+ | ● ● ● ● ○ ○ ○ ○ ● ● ● ● ● ● ○ ○ ○ ● ● |
+ | ● ● ● ○ ○ ● ● ● ● ● ● ○ ○ ○ ○ ○ ● ● ● |
+ | ● ● ● ● ○ ● ● ● ● ● ○ · ○ ○ ○ ○ ○ ○ ● |
+ | · ● ○ ○ ● ● ● ● ● ● ○ ○ ○ ○ ○ ○ ○ ○ ● |
+ | ● ○ ○ ○ ○ ● ● ● ● ● ● ○ ○ ○ ○ ○ ○ ○ ○ |
+ | ● ○ ○ ○ ○ ○ ● ● ● ● ● ● ○ ● ○ ○ ○ ○ ○ |
+ | ● ● ○ ○ ○ ○ ○ ● ● ● ● ● ● ● ● ○ ○ ○ ○ |
+ | ○ ○ ○ ○ ● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ○ ○ |
+ | ○ ○ ○ ○ ● ● ○ ○ ● ● ● ● ● ○ ○ ○ ○ ○ ○ |
+ | ○ ○ ○ ○ ○ ○ ○ ○ ● ● ● ● ● ○ ○ ○ ○ ○ ● |
+ | ○ ○ ○ ○ ○ ○ ○ ○ ● ● ● ● ● ● ● ● ● ● ● |
+ | ○ ○ ○ ○ ○ ○ ● ● ● ● ● ● ○ ○ ● ● ● ● ● |
+ | ○ ○ ○ · ○ ● ● ● ● ● ● ● ○ ○ ● ● ● ● ● |
+ | ○ ○ ○ ● ○ ● ● ● ● ● ● ● ○ · ● ● ● ● ● |
+ | ○ ○ ○ ○ ○ ○ ● ● ● ● ● ● ● ○ ● ● ● ● ● |
+ | ○ ○ ○ ○ ○ ● ● ● ● ● ● ● ● ● ● ● ● ● ● |
+ | ○ ○ ○ ○ ○ ● ● ● ● ● ● ● ● ● ● ● ● ● ● |
+ +---------------------------------------+
 ```
-The game continued until GnuGo passed, and goma passed the following move.
+Currently all games goma plays against itself end in seki.
 
 ***
 
 If you like this, you might also enjoy [dango](https://github.com/gsobell/dango).
-For an very intresting overview of Computer Go and a bot in Rust: [rustygo](https://github.com/mratsim/rustygo).
+
+For a very interesting overview of Computer Go and a bot in Rust: [rustygo](https://github.com/mratsim/rustygo).

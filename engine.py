@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-from random import choice
+# from random import choice
 from board import Board
+from logic import genmove_logic
 
 
 class Game:
@@ -28,23 +29,18 @@ class Game:
 
 
 def receive_input(game):
-    """Recieves user input and parses."""
+    """Parse user input"""
     user_in = input().split(' ')
-    # fix this with *args unpacking!!
     try:
         if user_in == ['']:
             raise ValueError
         if type(user_in[0]) == int:
-            print('yes')
-            print(user_in[0])
             game.id_, command, arg = user_in[0], user_in[1], user_in[2:]
         else:
             command, arg = user_in[0], user_in[1:]
-    except IndexError:
-        # Nothing to see here, just an explicitly silenced error.
+    except IndexError:  # explicitly silenced
         pass
-    except ValueError:
-        # user_in is null
+    except ValueError:  # user_in is null
         return 'no input', '', ''
     return user_in, command, arg
 
@@ -54,7 +50,7 @@ def info(game, user_in, command, arg):
     if command == 'name':
         game.output('goma')
     elif command == 'version':
-        game.output('0.0.3')
+        game.output('0.0.4')
     elif command == 'protocol_version':
         game.output('2')
     elif command == 'known_command':
@@ -74,16 +70,18 @@ def gameplay(game, user_in, command, arg):
         if move == 'pass':
             game.output()
             return
-        elif ('W' or 'w') in color:
+        elif ('W' in color) or ('w' in color):
             play(game.white, move, game)
-        elif ('B' or 'b') in color:
+        elif ('B' in color) or ('b' in color):
             play(game.black, move, game)
+        game.board.asciiboard()
         return
     elif command == 'genmove':
-        if ('W' or 'w') in user_in:
+        if ('W' in user_in) or ('w' in user_in):
             genmove(game.white, game)
-        elif ('B' or 'b') in user_in:
+        elif ('B' in user_in) or ('b' in user_in):
             genmove(game.black, game)
+        game.board.asciiboard()
         return
     game.error(f"{command} is not a valid move.")
 
@@ -145,42 +143,23 @@ def game_round(game):
 def genmove(color, game):
     if not game.board.empty:
         return game.output('PASS')
-    row, col = None, None
-    choices = game.board.empty[:]
-    while self_atari(row, col, color, game):  # needs checking, improvement
-        if row is not None:
-            choices.remove((row, col))
-        if not choices:
-            return game.output('PASS')
-        row, col = choice(choices)
-    game.board.empty.remove((row, col))
+    row, col = genmove_logic(color, game)
+    if row is None:
+        game.output('PASS')
+        return
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
-    # game.board.asciiboard1() # NOTE resume testing later
-    # game.board.asciiboard2()
     return game.output(coord_to_move(row, col, game.size))
 
 
 def play(color, move, game):
     row, col = move_to_coord(move, game.size)
-    if (row, col) in game.board.empty:
-        game.board.empty.remove((row, col))
+    if ((row, col) in [group for group in game.board.white]) or ((row, col) in [group for group in game.board.black]):
+        game.error('Illegal move, spot occupied.')
+        return
     game.hist.append((row, col))
     game.board.add_stone(row, col, color)
     game.output()
-
-
-def self_atari(row, col, color, game):
-    """Checks stone placement (row, col) isn't surrounded by opposite color"""
-    if row is None:
-        return True
-    adjacent = [(row + a[0], col + a[1]) for a in [(-1, 0), (1, 0), (0, -1), (0, 1)]
-                if ((0 <= row + a[0] < game.size) and (0 <= col + a[1] < game.size))]
-    friend = game.board.white if color == 1 else game.board.black
-    for stone in adjacent:
-        if (stone in game.board.empty) or (stone in friend):
-            return False
-    return True
 
 
 def coord_to_move(row, col, size):
