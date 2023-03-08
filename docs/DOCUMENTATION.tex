@@ -1,8 +1,16 @@
 \documentclass[11pt]{article}
 \usepackage{listings}
 \usepackage{mathtools}
-\usepackage{go}
-
+\usepackage{multicol}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = black, %Colour of internal links
+  citecolor    = red %Colour of citations
+}
+% \usepackage{go}
+% \usepackage{psgo}
 
     \title{\textbf{goma}}
     \author{gsobell}
@@ -10,13 +18,17 @@
     \addtolength{\topmargin}{-3cm}
     \addtolength{\textheight}{3cm}
 \begin{document}
-
 \maketitle
-\pagenumbering{arabic}
-% \subsection{}
+\tableofcontents
+\newpage
 
-\section{Game Engine}
-According to the GTP documentation:
+\pagenumbering{arabic}
+
+\subsection{Preface}
+\href{https://github.com/gsobell/goma}{\textbf{goma}} is a go engine, and it's scope and functionality is therefore limited to being an engine. For a go controller, see \href{https://github.com/gsobell/dango}{\textbf{dango}}. For clarity, all mention of groups will refer to chains, that is, groups that are connected.
+
+\section{GTP Implementation and Conformation}
+According to the Go Text Protocol (GTP) documentation:
 An engine is expected to keep track of the following state information:
 
 \begin{itemize}
@@ -29,6 +41,7 @@ An engine is expected to keep track of the following state information:
 \end{itemize}
 All implementations are required to support the following commands:
 
+\begin{multicols}{2}
 \begin{itemize}
 \item protocol\_version
 \item name
@@ -42,12 +55,24 @@ All implementations are required to support the following commands:
 \item play
 \item genmove
 \end{itemize}
+\end{multicols}
 
+\section{State}
+The stones are stored both as a 2D array, and as a list of lists, one for each color. Each list in the list is a group.
+Black is -1, white is 1, empty spot is 0.
+\subsection{Board}
+The board is stored as a 2D array.
+\subsection{Stones}
+\subsubsection{Groups}
+\subsubsection{Empty}
 
-\section{Weighing Move Priority}
+\section{Logic}
+\subsection{Weighing Move Priority}
+\subsection{Capture}
+\subsection{Defense}
+\subsection{Heuristics}
 
-\section{Additional Utilities}
-\subsection{nigiri.py}
+\section{Additional Resources}
 
 \end{document}
 
