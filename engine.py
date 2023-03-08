@@ -50,7 +50,7 @@ def info(game, user_in, command, arg):
     if command == 'name':
         game.output('goma')
     elif command == 'version':
-        game.output('0.0.4')
+        game.output('0.1.0')
     elif command == 'protocol_version':
         game.output('2')
     elif command == 'known_command':

@@ -13,9 +13,17 @@ This project is an outgrowth of [dango](https://github.com/gsobell/dango), with 
 To download and launch, run the following:
 ```shell
 git clone https://github.com/gsobell/goma.git
-cd goma
-chmod +x goma.py # make executable
+cd goma && chmod +x goma.py
+./goma.py
 ```
+
+To install on Arch-based distros, use the [PKGBUILD](https://github.com/gsobell/goma/blob/home/PKGBUILD):
+```shell
+curl -O https://raw.githubusercontent.com/gsobell/goma/home/PKGBUILD
+makepkg -i
+```
+
+
 You can use goma with any board GUI that supports `GTP` For example, with [Sabaki](https://github.com/SabakiHQ/Sabaki), go to preferences -> engines -> add engine, and place `/{path to goma}/goma.py` in the path field.
 
 There is also the `asciiboard()` function, uncommented by default, that provides an ascii terminal interface similar to GnuGo's `--mode ascii`.
