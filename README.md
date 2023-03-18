@@ -5,6 +5,22 @@ goma is a stochastic Go engine written in python
 > noun
 > 1. *Sesamum indicum* Sesame plant, produces small oval seeds.
 
+```sh
+                      A B C D E F G H J
+                    1 · · · · · · ○ · · 1
+                    2 · · · · · ○ · · ○ 2
+                    3 · ● · · ○ ● ○ · · 3
+                    4 · ○ · ● ○ · · · · 4
+                    5 · · ○ · · · · · · 5
+                    6 · · ○ · · · · · · 6
+                    7 · · · ● ● ● · ● · 7
+                    8 · · ○ · · · ● · · 8
+                    9 · · · · · ○ · · ○ 9
+                      A B C D E F G H J
+                    genmove B
+                    =F8
+```
+
 ### Project Motivation:
 This project is an outgrowth of [dango](https://github.com/gsobell/dango), with hope of being integrated back in the future. The goal isn't to compete with neural-net Go engines, rather to write a passably decent engine from scratch. It is very much a work in progress, and should be handled as such.
 

@@ -4,7 +4,7 @@
 pkgname=goma
 pkgver=0.1.0
 pkgrel=1
-pkgdesc='a stochastic Go engine written in python '
+pkgdesc='A stochastic Go engine written in python '
 arch=('any')
 url='https://github.com/gsobell/goma'
 license=('GPL')
